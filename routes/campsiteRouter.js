@@ -164,6 +164,7 @@ campsiteRouter.route('/:campsiteId/comments/:commentId')
     res.statusCode = 403;
     res.end(`POST operation not supported on /campsites/${req.params.campsiteId}/comments/${req.params.commentId}`);
 })
+//update existing data - only comment text and rating fields 
 .put((req, res, next) => {
     Campsite.findById(req.params.campsiteId)
     .then(campsite => {
