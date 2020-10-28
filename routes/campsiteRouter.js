@@ -139,7 +139,7 @@ campsiteRouter.route('/:campsiteId/comments')
     .catch(err => next(err));
 });
 
-//sepecific commentId
+//specific commentId
 campsiteRouter.route('/:campsiteId/comments/:commentId')
 .get((req, res, next) => {
     Campsite.findById(req.params.campsiteId)
