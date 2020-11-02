@@ -8,12 +8,16 @@ var app = require('../app');
 var debug = require('debug')('nucampsiteserver:server');
 var http = require('http');
 
+const https = require('https');
+const fs = require('fs');
+
 /**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+app.set('port', port); // port 80
+app.set('secPort', port+443);
 
 /**
  * Create HTTP server.
@@ -28,6 +32,27 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+/**
+ * Create HTTPS server.
+ */ 
+
+const options = {
+  key: fs.readFileSync(__dirname+'/server.key'), //points to current bin directory reads into contents in server.key file --> private key
+  cert: fs.readFileSync(__dirname+'/server.cert') // reads into server.cert = certified public key
+};
+
+const secureServer = https.createServer(options, app); // senter servery key and cert through using options object
+
+/**
+* Listen on provided port, on all network interfaces.
+*/
+
+secureServer.listen(app.get('secPort'), () => { //start listening on port 443
+  console.log('Server listening on port', app.get('secPort')); //called once listen method has been executed successfully
+});
+secureServer.on('error', onError);
+secureServer.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.

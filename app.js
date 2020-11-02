@@ -30,6 +30,16 @@ connect.then(() => console.log('Connected correctly to server'),
 
 var app = express();
 
+// Secure traffic only
+app.all('*', (req, res, next) => { //catches all types of request and use a wild card to catch everything
+  if (req.secure) { //secure property set by express automatically as true 
+    return next(); // pass into the next middleware function
+  } else {
+      console.log(`Redirecting to: https://${req.hostname}:${app.get('secPort')}${req.url}`);
+      res.redirect(301, `https://${req.hostname}:${app.get('secPort')}${req.url}`); // permanent redirect
+  }
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
