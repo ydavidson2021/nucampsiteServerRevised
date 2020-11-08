@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const Favorite = require('../models/favorite');
 const authenticate = require('../authenticate');
 const cors = require('./cors');
-const { pluralize } = require('mongoose');
 
 const favoriteRouter = express.Router(); //set up Router
 favoriteRouter.use(bodyParser.json());
